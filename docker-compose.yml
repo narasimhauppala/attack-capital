@@ -1,0 +1,76 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: amd-postgres
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: amd_user
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-Password1111}
+      POSTGRES_DB: amd_database
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U amd_user -d amd_database"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - amd-network
+
+  ml-service:
+    build: 
+      context: ./ml-service
+      dockerfile: Dockerfile
+    container_name: amd-ml-service
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - MODEL_NAME=facebook/wav2vec2-base
+      - WORKERS=2
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8000/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 90s
+    networks:
+      - amd-network
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: amd-app
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=postgresql://amd_user:${POSTGRES_PASSWORD:-Password1111}@postgres:5432/amd_database
+      - HF_API_URL=http://ml-service:8000
+      - TWILIO_ACCOUNT_SID=${TWILIO_ACCOUNT_SID}
+      - TWILIO_AUTH_TOKEN=${TWILIO_AUTH_TOKEN}
+      - TWILIO_CALLER_ID=${TWILIO_CALLER_ID}
+      - NEXT_PUBLIC_APP_URL=${NEXT_PUBLIC_APP_URL}
+      - BETTER_AUTH_SECRET=${BETTER_AUTH_SECRET}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      ml-service:
+        condition: service_healthy
+    networks:
+      - amd-network
+    command: sh -c "npx prisma migrate deploy && npm start"
+
+networks:
+  amd-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+    driver: local

@@ -16,6 +16,15 @@
 # Misc
 .DS_Store
 *.pem
+*.zip
+*.tar.gz
+*.sh
+
+# Temp/Deployment files
+DEPLOYMENT_STATUS.md
+EC2_DEPLOYMENT.md
+ML_SETUP.md
+QUICKSTART.md
 
 # Debug
 npm-debug.log*

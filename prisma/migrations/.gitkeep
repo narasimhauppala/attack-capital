@@ -1,0 +1,9 @@
+# Prisma Migrations
+
+This directory will contain your database migration files after running:
+
+```bash
+npx prisma migrate dev
+```
+
+Do not delete this folder.

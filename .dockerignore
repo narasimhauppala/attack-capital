@@ -1,0 +1,24 @@
+node_modules
+.next
+.git
+.gitignore
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.cache
+attack-capital
+attack-capital.tar.gz
+*.pem
+twilio_2FA_recovery_code.txt
+README.md
+QUICKSTART.md
+ML_SETUP.md
+EC2_DEPLOYMENT.md
+deploy-ec2.sh
+Attack Capital Assignment 1 – Advanced Answering Machine Detection (AMD).md

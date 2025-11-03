@@ -1,0 +1,82 @@
+// This is your Prisma schema file
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  password  String
+  role      UserRole @default(VIEWER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
+}
+
+model CallLog {
+  id         String    @id @default(cuid())
+  callSid    String?   @unique
+  toNumber   String
+  fromNumber String?
+  strategy   Strategy
+  status     CallStatus @default(INITIATED)
+  amdResult  String?
+  latencyMs  Int?
+  startedAt  DateTime  @default(now())
+  answeredAt DateTime?
+  completedAt DateTime?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  
+  events     AmdEvent[]
+
+  @@index([strategy])
+  @@index([status])
+  @@index([createdAt])
+  @@map("call_logs")
+}
+
+model AmdEvent {
+  id         String   @id @default(cuid())
+  callLogId  String
+  callLog    CallLog  @relation(fields: [callLogId], references: [id], onDelete: Cascade)
+  decision   String
+  confidence Float?
+  payload    Json?
+  timestamp  DateTime @default(now())
+  createdAt  DateTime @default(now())
+
+  @@index([callLogId])
+  @@map("amd_events")
+}
+
+enum UserRole {
+  ADMIN
+  EDITOR
+  VIEWER
+}
+
+enum Strategy {
+  TWILIO_NATIVE
+  JAMBONZ_SIP
+  HUGGINGFACE_ML
+}
+
+enum CallStatus {
+  INITIATED
+  RINGING
+  IN_PROGRESS
+  COMPLETED
+  FAILED
+  BUSY
+  NO_ANSWER
+}

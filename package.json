@@ -3,40 +3,47 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "tsx watch server.ts",
+    "dev:next": "next dev",
     "build": "next build",
-    "start": "next start",
+    "start": "tsx server.ts",
+    "start:next": "next start",
     "lint": "next lint",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
     "db:studio": "prisma studio",
     "docker:up": "docker-compose up -d",
-    "docker:down": "docker-compose down"
+    "docker:down": "docker-compose down",
+    "docker:ml": "docker-compose up -d ml-service"
   },
   "dependencies": {
+    "@prisma/client": "^5.22.0",
+    "@tanstack/react-query": "^5.59.16",
+    "axios": "^1.7.7",
+    "better-auth": "^1.0.8",
+    "crypto": "^1.0.1",
+    "date-fns": "^4.1.0",
     "next": "14.2.15",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "@prisma/client": "^5.22.0",
-    "better-auth": "^1.0.8",
-    "@tanstack/react-query": "^5.59.16",
-    "zod": "^3.23.8",
     "twilio": "^5.3.4",
     "ws": "^8.18.0",
-    "axios": "^1.7.7",
-    "date-fns": "^4.1.0",
-    "crypto": "^1.0.1"
+    "zod": "^3.23.8"
   },
   "devDependencies": {
-    "typescript": "^5.6.3",
+    "@tailwindcss/postcss": "^4.1.16",
+    "@tailwindcss/vite": "^4.0.0-alpha.25",
     "@types/node": "^22.7.9",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
     "@types/ws": "^8.5.13",
+    "autoprefixer": "^10.4.21",
+    "eslint": "^8.57.1",
+    "eslint-config-next": "14.2.15",
+    "postcss": "^8.5.6",
     "prisma": "^5.22.0",
     "tailwindcss": "^4.0.0",
-    "@tailwindcss/vite": "^4.0.0-alpha.25",
-    "eslint": "^8.57.1",
-    "eslint-config-next": "14.2.15"
+    "tsx": "^4.20.6",
+    "typescript": "^5.6.3"
   }
 }
