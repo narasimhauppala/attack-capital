@@ -9,6 +9,12 @@ Answering Machine Detection for outbound phone calls using Twilio.
 npm install
 ```
 
+```plaintext
+Site live on aws ec2: https://6e5710905521.ngrok-free.app/
+
+```
+
+
 **Configure environment**
 
 Copy `.env.example` to `.env` and add your Twilio credentials:
