@@ -1,92 +1,182 @@
-# AMD System# AMD System - Advanced Answering Machine Detection
+# AMD System# AMD System# AMD System - Advanced Answering Machine Detection
 
 
 
-Answering Machine Detection for outbound calls. Detects if a person or voicemail answered.Multi-strategy Answering Machine Detection (AMD) system built with Next.js 14, Prisma, and Twilio. Detects whether outbound calls are answered by humans or voicemail machines with 90%+ accuracy in under 3 seconds.
+Answering Machine Detection for outbound phone calls.
 
 
 
-## Quick Start## 🚀 Features
+## Quick StartAnswering Machine Detection for outbound calls. Detects if a person or voicemail answered.Multi-strategy Answering Machine Detection (AMD) system built with Next.js 14, Prisma, and Twilio. Detects whether outbound calls are answered by humans or voicemail machines with 90%+ accuracy in under 3 seconds.
 
 
+
+**1. Install dependencies**
+
+```bash
+
+npm install## Quick Start## 🚀 Features
+
+```
+
+
+
+**2. Setup environment**
 
 **Install**- **Multi-Strategy AMD Detection**
 
-```bash  - Twilio Native AMD (~90% accuracy, ~2100ms latency)
+Copy `.env.example` to `.env` and add your credentials:
 
-npm install  - Jambonz SIP (~93% accuracy, ~1800ms latency)
+```env```bash  - Twilio Native AMD (~90% accuracy, ~2100ms latency)
 
-```  - HuggingFace ML (~95% accuracy, ~2200ms latency)
+TWILIO_ACCOUNT_SID=your_sid
+
+TWILIO_AUTH_TOKEN=your_tokennpm install  - Jambonz SIP (~93% accuracy, ~1800ms latency)
+
+TWILIO_CALLER_ID=+1234567890
+
+DATABASE_URL=postgresql://amd_user:amd_password@localhost:5432/amd_database```  - HuggingFace ML (~95% accuracy, ~2200ms latency)
+
+```
 
 
 
-**Setup environment**- **Real-time Call Management**
+**3. Start database**
 
-  - Place outbound calls with strategy selection
+```bash**Setup environment**- **Real-time Call Management**
 
-Copy `.env.example` to `.env` and add your Twilio credentials:  - Live call status updates
+docker compose up -d postgres
 
-```  - Auto-refreshing call history
+```  - Place outbound calls with strategy selection
+
+
+
+**4. Run migrations**Copy `.env.example` to `.env` and add your Twilio credentials:  - Live call status updates
+
+```bash
+
+npx prisma migrate dev```  - Auto-refreshing call history
+
+```
 
 TWILIO_ACCOUNT_SID=your_sid_here
 
-TWILIO_AUTH_TOKEN=your_token_here  - **Analytics & Reporting**
+**5. Start app**
 
-TWILIO_CALLER_ID=+1234567890  - Call logs with filters (strategy, status)
+```bashTWILIO_AUTH_TOKEN=your_token_here  - **Analytics & Reporting**
 
-DATABASE_URL=postgresql://amd_user:amd_password@localhost:5432/amd_database  - CSV export functionality
+npm run dev
 
-```  - Latency and accuracy metrics
+```TWILIO_CALLER_ID=+1234567890  - Call logs with filters (strategy, status)
 
 
 
-**Start database**- **Production-Ready Stack**
+Visit http://localhost:3000DATABASE_URL=postgresql://amd_user:amd_password@localhost:5432/amd_database  - CSV export functionality
 
-```bash  - Next.js 14 App Router + TypeScript
+
+
+## Usage```  - Latency and accuracy metrics
+
+
+
+1. Go to `/dial` page
+
+2. Enter phone number
+
+3. Select "Twilio Native AMD"**Start database**- **Production-Ready Stack**
+
+4. Click Dial
+
+5. Answer your phone```bash  - Next.js 14 App Router + TypeScript
+
+6. Check `/history` for results
 
 docker compose up -d postgres  - PostgreSQL with Prisma ORM
 
+## What Works
+
 ```  - Docker Compose for easy setup
+
+**Twilio Native AMD** - Production ready, ~90% accurate, ~7 second detection time
 
   - Tailwind CSS for styling
 
+**ML Detection** - Code complete but has WebSocket tunnel issues, not functional
+
 **Run migrations**  - React Query for state management
+
+## Tech Stack
 
 ```bash  - Zod for validation
 
-npx prisma migrate dev
+- Next.js 14
 
-```## 📋 Prerequisites
+- PostgreSQL + Prismanpx prisma migrate dev
 
+- Twilio Voice API
 
-
-**Start the app**- Node.js 18+ and npm/pnpm
-
-```bash- Docker and Docker Compose
-
-npm run dev- Twilio account with:
-
-```  - Account SID
-
-  - Auth Token
-
-Visit http://localhost:3000  - Phone number (Caller ID)
+- Docker```## 📋 Prerequisites
 
 
 
-## How to use## 🛠️ Setup Instructions
+## Project Structure
 
 
 
-1. Go to the Dial page### 1. Clone and Install
+```**Start the app**- Node.js 18+ and npm/pnpm
 
-2. Enter a phone number
+app/
+
+  api/```bash- Docker and Docker Compose
+
+    dial/          - Makes calls
+
+    calls/         - Call historynpm run dev- Twilio account with:
+
+    amd/callback/  - Twilio webhooks
+
+  dial/            - Dialer UI```  - Account SID
+
+  history/         - Call logs UI
+
+lib/  - Auth Token
+
+  amd/             - Detection logic
+
+prisma/            - Database schemaVisit http://localhost:3000  - Phone number (Caller ID)
+
+ml-service/        - ML model (not working)
+
+```
+
+
+
+## Commands## How to use## 🛠️ Setup Instructions
+
+
+
+```bash
+
+npm run dev          # Start dev server
+
+npx prisma studio    # View database1. Go to the Dial page### 1. Clone and Install
+
+docker compose up    # Start all services
+
+docker compose down  # Stop services2. Enter a phone number
+
+```
 
 3. Select "Twilio Native AMD" ```bash
 
+## Notes
+
 4. Click Dialgit clone <your-repo-url>
 
-5. Answer the phonecd attack-capital
+- Trial accounts can only call verified numbers
+
+- Native AMD is reliable and ready for production5. Answer the phonecd attack-capital
+
+- ML strategy blocked by infrastructure limitations
 
 6. Check History page for resultsnpm install
 
